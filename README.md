@@ -43,7 +43,11 @@ const WrappedSingleListItem = ({
   );
 };
 
-//added isRequired in index and isSelected, as if both of them are not passed, then it will lead to error, as index is required by onClickHandler and isSelected is required to change styling
+<!--  
+added isRequired in index and isSelected, as if both of them are not passed, then it will lead to error,
+as index is required by onClickHandler and isSelected is required to change styling
+-->
+
 
 WrappedSingleListItem.propTypes = {
   index: PropTypes.number.isRequired,             
@@ -93,7 +97,13 @@ WrappedListComponent.propTypes = {
 WrappedListComponent.defaultProps = {
   items: [],
 };
-// items should be an array, otherwise error will be thrown in initial render if no items are passed. Because .map is called on items, it will show error because it is not an array but a null.But if it is initalised as an array, then no error will be there.
+
+<!-- 
+items should be an array, otherwise error will be thrown in initial render if no items are passed.
+Because .map is called on items, it will show error because it is not an array but a null.
+But if it is initalised as an array, then no error will be there.
+-->
+
 
 const List = memo(WrappedListComponent);
 
