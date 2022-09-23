@@ -21,4 +21,85 @@ I have identified three problems in this code.
    
 ## Please fix, optimize, and/or modify the component as much as you think is necessary.
 
+```
+import React, { useState, useEffect, memo } from 'react';
+import PropTypes from 'prop-types';
+
+// Single List Item
+
+const WrappedSingleListItem = ({
+  index,
+  isSelected,
+  onClickHandler,
+  text,
+}) => {
+  return (
+    <li
+      style={{ backgroundColor: isSelected ? 'green' : 'red'}}
+      onClick={() => onClickHandler(index)}
+    >
+      {text}
+    </li>
+  );
+};
+
+//added isRequired in index and isSelected, as if both of them are not passed, then it will lead to error, as index is required by onClickHandler and isSelected is required to change styling
+
+WrappedSingleListItem.propTypes = {
+  index: PropTypes.number.isRequired,             
+  isSelected: PropTypes.bool.isRequired,
+  onClickHandler: PropTypes.func.isRequired,
+  text: PropTypes.string.isRequired,
+};
+
+const SingleListItem = memo(WrappedSingleListItem);
+
+// List Component
+const WrappedListComponent = ({
+  items,
+}) => {
+  const [selectedIndex, setSelectedIndex] = useState();
+  // fixed the logic error here, as the variable names have been reversed
+
+  useEffect(() => {
+    setSelectedIndex(null);
+  }, [items]);
+
+  const handleClick = index => {
+    setSelectedIndex(index);
+  };
+
+  return (
+    <ul style={{ textAlign: 'left' }}>
+      {items.map((item, index) => (
+        <SingleListItem
+          onClickHandler={() => handleClick(index)}
+          text={item.text}
+          index={index}
+          isSelected={selectedIndex}
+        />
+      ))}
+    </ul>
+  )
+};
+
+WrappedListComponent.propTypes = {
+  items: PropTypes.arrayOf(PropTypes.shape({
+    text: PropTypes.string.isRequired,
+  })),
+};
+//fixed the syntax error here, as arrayOf should be there instead of array, and shape should be there instead of shapeOf
+
+WrappedListComponent.defaultProps = {
+  items: [],
+};
+// items should be an array, otherwise error will be thrown in initial render if no items are passed. Because .map is called on items, it will show error because it is not an array but a null.But if it is initalised as an array, then no error will be there.
+
+const List = memo(WrappedListComponent);
+
+export default List;
+
+
+```
+
 
